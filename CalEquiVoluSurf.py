@@ -80,13 +80,8 @@ def CalMspFromBlock(Surf, BInd, BlockDir=False, Verbose=False):
 
         if Verbose:
             print("Get Values of %s" % MncFile)
-
-        CoordStr=""
-        for i, c in enumerate(CoordList):
-            CoordStr+="%lf %lf %lf\n" % (c[0], c[1], c[2])
         
-        with open("./coord.list", "w") as fid:
-            fid.write(CoordStr)
+        np.savetxt("./coord.list", CoordList, fmt="%lf", delimiter=" ")
         
         StdOut=subprocess.check_output(
             ["./print_world_value_one_mnc", MncPath, "./coord.list"])
@@ -201,7 +196,7 @@ def ReadGii(GiiFile, Type='surf'):
     return DataDict
 
 if __name__=='__main__':
-    if len(sys.argv)==11:
+    if len(sys.argv)==12:
         WmSurfFile_L=sys.argv[1]
         GmSurfFile_L=sys.argv[2]
         WmAreaFile_L=sys.argv[3]
@@ -215,17 +210,31 @@ if __name__=='__main__':
         OutPrefix=sys.argv[11]
 
     else:
-        WmSurfFile_L="LindsaySurf/white_left_327680.surf.gii"
-        GmSurfFile_L="LindsaySurf/gray_left_327680.surf.gii"
-        WmAreaFile_L="LindsayArea/white_left_327680.area.shape.gii"
-        GmAreaFile_L="LindsayArea/gray_left_327680.area.shape.gii"
-        WmSurfFile_R="LindsaySurf/white_right_327680.surf.gii"
-        GmSurfFile_R="LindsaySurf/gray_right_327680.surf.gii"
-        WmAreaFile_R="LindsayArea/white_right_327680.area.shape.gii"
-        GmAreaFile_R="LindsayArea/gray_right_327680.area.shape.gii"
+        WmSurfFile_L="Surf/masked_surfs_april2019_left_20_layer3.surf.gii"
+        GmSurfFile_L="Surf/masked_surfs_april2019_left_20_layer1.surf.gii"
+        WmAreaFile_L="Area/masked_surfs_april2019_left_20_layer3.area.shape.gii"
+        GmAreaFile_L="Area/masked_surfs_april2019_left_20_layer1.area.shape.gii"
+        WmSurfFile_R="Surf/masked_surfs_april2019_right_20_layer3.surf.gii"
+        GmSurfFile_R="Surf/masked_surfs_april2019_right_20_layer1.surf.gii"
+        WmAreaFile_R="Area/masked_surfs_april2019_right_20_layer3.area.shape.gii"
+        GmAreaFile_R="Area/masked_surfs_april2019_right_20_layer1.area.shape.gii"
         NumSurf=102
-        OutDir="KonradSurf_Layer0ToLayer6/"
-        OutPrefix="BB_Old_G_W_2"
+        OutDir="KonradSurf_Layer1ToLayer3/"
+        OutPrefix="BB_L1_L3"
+
+    # Print Argv
+    print("Left Inner Surface: %s" % WmSurfFile_L)
+    print("Left Outer Surface: %s" % GmSurfFile_L)
+    print("Left Inner Area: %s" % WmAreaFile_L)
+    print("Left Outer Area: %s" % GmAreaFile_L)
+
+    print("Right Inner Surface: %s" % WmSurfFile_R)
+    print("Right Outer Surface: %s" % GmSurfFile_R)
+    print("Right Inner Area: %s" % WmAreaFile_R)
+    print("Right Outer Area: %s" % GmAreaFile_R)
+
+    print("Number of Ev Surf: %d" % int(NumSurf))
+    print("Output Prefix: %s" % OutPrefix)
 
     # Left
     EvSurf_L=CalEquiVoluSurf(
