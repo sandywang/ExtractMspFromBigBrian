@@ -115,7 +115,7 @@ def CalEquiVoluSurf(
 
     # Estimate Vertical from White Surface to Gray Surface
     GmToWmVectors=WmSurfS['vertices']-GmSurfS['vertices']
-    VMsk=GmToWmVectors.sum(axis=1)!=0
+    VMsk=np.all(GmToWmVectors==0, axis=1)==0
     if VMsk.shape[0]!=WmAreaS['cdata'].shape[0]:
         print('\t%s\n' % OutPrefix)
 
@@ -218,7 +218,7 @@ if __name__=='__main__':
         GmSurfFile_R="Surf/masked_surfs_april2019_right_20_layer1.surf.gii"
         WmAreaFile_R="Area/masked_surfs_april2019_right_20_layer3.area.shape.gii"
         GmAreaFile_R="Area/masked_surfs_april2019_right_20_layer1.area.shape.gii"
-        NumSurf=102
+        NumSurf=91
         OutDir="KonradSurf_Layer1ToLayer3/"
         OutPrefix="BB_L1_L3"
 
@@ -260,13 +260,13 @@ if __name__=='__main__':
     BIndMat_LR=np.c_[BIndMat_L, BIndMat_R]
     EvSurf_LR=np.concatenate((EvSurf_L, EvSurf_R), axis=2)
     print("Saving SurfCoord and BlockInd")
-    with open("%s_LR_SurfBInd.pkl" % OutPrefix, "wb") as handle:
+    with open(os.path.join(OutDir, "%s_LR_SurfBInd.pkl" % OutPrefix), "wb") as handle:
         pickle.dump((EvSurf_LR, BIndMat_LR), handle)
 
     Msp=CalMspFromBlock(EvSurf_LR, BIndMat_LR, 
         BlockDir="Block_20um_geo_mnc", Verbose=True)
     print("Saving Msp")
-    with open("%s_LR_Msp.pkl" % OutPrefix, "wb") as handle:
+    with open(os.path.join(OutDir, "%s_LR_Msp.pkl" % OutPrefix), "wb") as handle:
         pickle.dump(Msp, handle)
 
     print("Done")
