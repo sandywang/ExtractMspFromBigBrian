@@ -89,7 +89,10 @@ def CalMspFromBlock(Surf, BInd, BlockDir=False, Verbose=False):
         #with open("./value.txt", "r") as fid:
         #    OutStr=fid.read()
         OutLine=StdOut.split("\n")
-        OutStr=OutLine[1].split("\t")
+        if len(OutLine)==1:
+            OutStr=OutLine[0].split("\t")
+        else:
+            OutStr=OutLine[1].split("\t")
         OutStr=OutStr[:-1]
         BlockMsp=np.array(OutStr, dtype=np.float32)
 
